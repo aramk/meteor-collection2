@@ -1,14 +1,11 @@
-Collection2 [![Build Status](https://travis-ci.org/aldeed/meteor-collection2.png?branch=master)](https://travis-ci.org/aldeed/meteor-collection2)
+[![Build Status](https://travis-ci.org/aldeed/meteor-collection2.png?branch=master)](https://travis-ci.org/aldeed/meteor-collection2)
+
+Collection2
 =========================
 
-A smart package for Meteor that extends Mongo.Collection to provide support
-for specifying a schema and then validating against that schema
-when inserting and updating.
+A Meteor package that allows you to attach a schema to a Mongo.Collection. Automatically validates against that schema when inserting and updating from client or server code.
 
-This package requires and automatically installs the 
-[aldeed:simple-schema](https://github.com/aldeed/meteor-simple-schema) package,
-which provides the `SimpleSchema` object type for defining and validating
-against schemas.
+This package requires and automatically installs the [aldeed:simple-schema](https://github.com/aldeed/meteor-simple-schema) package, which defines the schema syntax and provides the validation logic.
 
 ## Installation
 
@@ -209,8 +206,10 @@ Schema.User = new SimpleSchema({
         blackbox: true
     },
     // Add `roles` to your schema if you use the meteor-roles package.
-    // Note that when using this package, you must also specify the
+    // Option 1: Object type
+    // If you specify that type as Object, you must also specify the
     // `Roles.GLOBAL_GROUP` group whenever you add a user to a role.
+    // Example:
     // Roles.addUsersToRoles(userId, ["admin"], Roles.GLOBAL_GROUP);
     // You can't mix and match adding with and without a group since
     // you will fail validation in some cases.
@@ -218,6 +217,13 @@ Schema.User = new SimpleSchema({
         type: Object,
         optional: true,
         blackbox: true
+    },
+    // Option 2: [String] type
+    // If you are sure you will never need to use role groups, then
+    // you can specify [String] as the type
+    roles: {
+        type: [String],
+        optional: true
     }
 });
 
